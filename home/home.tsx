@@ -13,7 +13,7 @@ export default function HomePage() {
         router.push('/login'); // Replace with your desired route
       };
   return (
-    <div className="flex flex-col w-full justify-end">
+    <div className="flex flex-col px-5 py-10 w-full justify-end">
       <h2 className="text-[28px]/[17px] text-black font-semibold">
         Welcome To PopX
       </h2>

@@ -1,14 +1,17 @@
 "use client";
+
 import { TextField } from "@mui/material";
 import { Button } from "../../../Components/button";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState(true);
 
-  // Handle change for email and password
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
@@ -16,12 +19,20 @@ export default function Login() {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPassword(value);
-    // Check if password length is valid
     setIsPasswordValid(value.length >= 6);
   };
 
-  // Enable button when both fields are filled and password is valid
   const isFormValid = email !== "" && password !== "" && isPasswordValid;
+
+  const handleLogin = () => {
+    if (!isFormValid) {
+      alert("Please fill all fields correctly.");
+      return;
+    }
+
+    // Navigate to /account-settings
+    router.push("/account-settings");
+  };
 
   return (
     <div className="flex flex-col px-5 py-10 w-full justify-between">
@@ -33,50 +44,61 @@ export default function Login() {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit,
         </p>
         <div className="mt-[30px]">
-          {[
-            { label: "Email address", placeholder: "Enter Email Address" },
-            {
-              label: "Password",
-              type: "password",
-              placeholder: "Enter Password",
-            },
-          ].map(({ label, type = "text", placeholder }) => (
-            <div key={label} className="mb-4 w-full">
-              <TextField
-                id={label}
-                label={label}
-                type={type}
-                placeholder={placeholder}
-                value={label === "Email address" ? email : password}
-                onChange={
-                  label === "Email address"
-                    ? handleEmailChange
-                    : handlePasswordChange
-                }
-                inputProps={{
-                  style: {
-                    padding: "10px", // Add padding inside the input field
-                  },
-                }}
-                InputLabelProps={{ shrink: true }}
-                className="w-full p-0"
-                sx={{
-                  "& label": {
-                    color: "#6C25FF",
-                  },
-                  "& label.Mui-focused": {
-                    color: "#000",
-                  },
-                  "& .MuiFormLabel-asterisk": {
-                    color: "red", // change asterisk color here
-                  },
-                }}
-              />
-            </div>
-          ))}
+          <div className="mb-4 w-full">
+            <TextField
+              id="Email address"
+              label="Email address"
+              placeholder="Enter Email Address"
+              value={email}
+              onChange={handleEmailChange}
+              inputProps={{ style: { padding: "10px" } }}
+              InputLabelProps={{ shrink: true }}
+              className="w-full p-0"
+              sx={muiStyles}
+            />
+          </div>
+          <div className="mb-4 w-full">
+            <TextField
+              id="Password"
+              label="Password"
+              type="password"
+              placeholder="Enter Password"
+              value={password}
+              onChange={handlePasswordChange}
+              inputProps={{ style: { padding: "10px" } }}
+              InputLabelProps={{ shrink: true }}
+              className="w-full p-0"
+              sx={muiStyles}
+              error={!isPasswordValid && password !== ""}
+              helperText={
+                !isPasswordValid && password !== ""
+                  ? "Password must be at least 6 characters"
+                  : ""
+              }
+            />
+          </div>
         </div>
-        <Button text="Login" variant="primary" disabled={!isFormValid} />
+
+        <Button
+          text="Login"
+          variant="primary"
+          disabled={!isFormValid}
+          onClick={handleLogin}
+        />
       </div>
     </div>
   );
 }
+
+// MUI input styles
+const muiStyles = {
+  "& label": {
+    color: "#6C25FF",
+  },
+  "& label.Mui-focused": {
+    color: "#000",
+  },
+  "& .MuiFormLabel-asterisk": {
+    color: "red",
+  },
+};

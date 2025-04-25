@@ -24,6 +24,7 @@ export default function Register() {
               <TextField
                 required={required}
                 id="outlined-required"
+                type={type}
                 label={label}
                 inputProps={{
                   style: {
